@@ -1,0 +1,73 @@
+{% extends 'base.html'%}
+{%load game_tags%}
+{%block main%}
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4"> Ranking Table</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active"> Ranking Table</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-body" style="background-color: #f7f7f7;">
+                                <form action="{%url 'csv_file_upload'%}" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">File: </label>
+                                        <div class="col-md-8">
+                                            <input type="file" name="file" id="file" required="True" class="form-control">
+                                        </div> 
+                                        <br>             
+                                    </div>
+                                    <div class="form-group">                    
+                                        <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
+                                             <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>Upload </button>
+                                        </div> 
+                                    </div>
+                                    <span style="font-size: 14px;color:rgb(75, 73, 73)">  
+                                        Note: The CSV file should have the following format:
+team_1 name, team_1 score, team_2 name, team_2 score . <br><br>    </span>
+                                    </form>
+                            </div>
+                        </div>
+                        {%if team_and_score%}
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Ranking Table <a href="{{csv_file}}" target="_blank"><button class="btn btn-primary" type="button" style="float: right;margin-right: 10px;">Download as CSV</button></a>&nbsp;&nbsp;
+                                <a href="{{pdf_file}}" target="_blank" ><button class="btn btn-primary" type="button" style="float: right;margin-right: 10px;">Download as PDF</button></a>
+                            </div>
+                            
+                           
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Ranking</th>
+                                            <th>Team</th>
+                                            <th>Points</th>
+                                          
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Ranking</th>
+                                            <th>Team</th>
+                                            <th>Points</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {%for team in team_and_score%}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{team}}</td>
+                                            <td>{{team_and_score|get_item:team}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                           
+                        </div>
+                        {%endif%}
+                    </div>
+{%endblock%}

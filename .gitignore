@@ -1,0 +1,7 @@
+db.sqlite3
+
+
+# Compiled Python bytecode
+*.py[cod]
+media/
+static/

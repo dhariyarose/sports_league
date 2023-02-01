@@ -1,0 +1,156 @@
+{% extends 'base.html'%}
+{%block main%}
+<div class="container-fluid px-4">
+   <button type="button"  class="btn btn-info" id="myButton"   style="color: #fff;float: right;width: 15%;"  >New Game</button>
+   <h1 class="mt-4">Games List </h1>
+   <ol class="breadcrumb mb-4">
+      <li class="breadcrumb-item"><a href="{%url 'dashboard' %}">Dashboard</a></li>
+      <li class="breadcrumb-item active">Games</li>
+   </ol>
+   <div class="card mb-4">
+   </div>
+</div>
+<div class="card mb-4">
+   <!-- <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      DataTable Example
+      </div> -->
+   <div class="card-body">
+       {%if games%}
+      <table id="datatablesSimple">
+         <thead>
+            <tr>
+               <th>No.</th>
+               <th>Name</th>
+               <th>Description</th>
+               <th>No. of Teams</th>
+               <th>No. of participants in a team</th>
+               <th>Created User and time</th>
+               <th>Updated User and time</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tfoot>
+            <tr>
+               <th>No.</th>
+               <th>Name</th>
+               <th>Description</th>
+               <th>No. of Teams</th>
+               <th>No. of participants in a team</th>
+               <th>Created User and Time</th>
+               <th>Updated User and Time</th>
+               <th>Actions</th>
+            </tr>
+         </tfoot>
+         <tbody>
+            {%for game in games%}
+            <tr>
+               <th>{{forloop.counter}}</th>
+               <td>{{game.name}}</td>
+               <td>{{game.description}}</td>
+               <td>{%if game.no_of_teams%}{{game.no_of_teams}}{%endif%}</td>
+               <td>{%if game.no_of_participants%}{{game.no_of_participants}}{%endif%}</td>
+               <td>
+                   {%if game.created_by%}
+                    {{game.created_by.first_name}}  {{game.created_by.last_name}}<br>
+                    {{game.created_at|date:"d-m-Y h:i A"}}
+                   {%endif%}
+               </td>
+               <td>
+                {%if game.updated_by%}
+                 {{game.updated_by.first_name}}  {{game.updated_by.last_name}}<br>
+                 {{game.updated_at|date:"d-m-Y h:i A"}}
+                {%endif%}
+            </td>
+               <td>
+                  <a class="view"  href="{%url 'game_edit' game.slug%}"><button type="button" class="btn btn-info" style="color: #fff;"  >Edit</button></a>
+                  <a class="view" href="javascript:deleteItem({{ game.id }})"><button type="button" class="btn btn-danger" style="color: #fff;"  >Delete</button></a>
+               </td>
+               </span>
+               </td>
+            </tr>
+            {%endfor%}
+         </tbody>
+      </table>
+      {%else%}
+      <p>Games have not been added yet</p>
+      {%endif%}
+   </div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">New Game</h4>
+         </div>
+         <div class="modal-body">
+            <form action="{% url 'game_new' %}" method="POST">
+               {%csrf_token%}
+               <div class="form-group">
+                  <label for="email1">Name*</label>
+                  <input type="text" class="form-control" id="name"  name="name" value="" required>
+               </div>
+               <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Description*</label>
+                  <textarea class="form-control rounded-0" id="description" rows="3" name="description" required> </textarea>
+               </div>
+               <div class="form-group">
+                  <label for="email1">No. of teams</label>
+                  <input type="number" class="form-control" id="no_of_teams"  name="no_of_teams" value="" >
+               </div>
+               <div class="form-group">
+                  <label for="email1">No. of participants in a team</label>
+                  <input type="number" class="form-control" id="no_of_participants"  name="no_of_participants" value="" >
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-default"data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+               </div>
+            </form>
+         </div>
+      </div>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->    
+<form name="delForm" action="{%url 'game_delete'%}" method="post">
+   {% csrf_token %}
+   <input type="hidden" name="game_id" value="">
+</form>
+{%endblock%}
+{%block js%}
+<script type="text/javascript">
+   function deleteItem(id) {
+       document.forms['delForm'].game_id.value = id;
+       if (confirm('Are you sure you want to delete?')) {
+           document.forms['delForm'].submit();
+       }
+   }
+   
+   
+   
+   /*--END Toggle--*/
+   
+   
+</script>
+<script>
+   /*--Toggle Slide Menu--*/
+   $('#btnNavToggle').click(function() {
+   if ( $('#content-wrap').hasClass('navOpen') ){
+       $('#content-wrap').animate({'left': 0}).removeClass('navOpen');
+   } else {
+       $('#content-wrap').animate({'left': 250}).addClass('navOpen');
+   }
+   
+   });
+   
+   /*--END Toggle--*/
+   $('#myButton').click(function() {
+   $('#myModal').modal("show");
+   
+   });
+</script>
+{%endblock%}

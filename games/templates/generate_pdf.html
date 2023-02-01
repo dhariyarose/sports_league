@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Font and Styles</title>
+<style type="text/css">
+p.comment {
+	font-size: 20px;
+}
+td{
+    text-align: center;
+}
+</style>
+</head>
+<body>
+<p class="comment">Ranking Table </p>
+<table width="100%" style="border: 1px solid rgb(143, 142, 142);
+border-collapse: collapse;" cellspacing="0" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Ranking</th>
+            <th>Team</th>
+            <th>Points</th>
+          
+        </tr>
+    </thead>
+    
+    <tbody>
+        {%for team in team_and_score%}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{team}}</td>
+            <td>{{team_and_score|get_item:team}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+ 
+</table>
+<p>&nbsp;</p>
+</body>
+</html>
