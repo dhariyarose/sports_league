@@ -3,7 +3,7 @@ How to run:
 
 Do the following steps,
 
-git clone
+git clone https://github.com/dhariyarose/sports_league.git
 cd sports_league/
 virtualenv env_name
 source env_name/bin/activate
